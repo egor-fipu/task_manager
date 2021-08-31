@@ -63,3 +63,5 @@ python manage.py test
 
 - [Swagger](http://127.0.0.1:8000/swagger/)
 - [ReDoc](http://127.0.0.1:8000/redoc/)
+
+[*Некоторые примеры запросов к API*](API.md)
