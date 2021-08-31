@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from task.models import Task, TaskHistory
+from .models import Task, TaskHistory
 from .signals import update_task
 
 
@@ -24,6 +24,14 @@ class TaskSerializer(serializers.ModelSerializer):
         )
         return instance
 
+    def validate_finished(self, value):
+        if self.instance and value < self.instance.created.date():
+            raise serializers.ValidationError(
+                'Планируемая дата завершения '
+                'не может быть ранее даты добавления'
+            )
+        return value
+
 
 class TaskHistorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,7 +39,7 @@ class TaskHistorySerializer(serializers.ModelSerializer):
             'title',
             'description',
             'status',
-            'plan_complet_date',
+            'finished',
             'date_change'
         )
         model = TaskHistory
@@ -51,7 +59,7 @@ class HistoryTaskSerializer(serializers.ModelSerializer):
             'description',
             'created',
             'status',
-            'plan_complet_date',
+            'finished',
             'author',
             'history'
         )

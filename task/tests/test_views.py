@@ -14,9 +14,9 @@ class ViewsTests(APITestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.domain = 'http://127.0.0.1:8000'
-        cls.tasks_url = f'{cls.domain}/api/tasks/'
-        cls.task_history_url = f'{cls.domain}/api/task-history/'
+        cls.domain = 'http://127.0.0.1:8000/api/v1'
+        cls.tasks_url = f'{cls.domain}/tasks/'
+        cls.task_history_url = f'{cls.domain}/task-history/'
         cls.user_1 = User.objects.create(
             username='username'
         )
@@ -24,7 +24,7 @@ class ViewsTests(APITestCase):
             author=cls.user_1,
             title='Название первой задачи',
             description='Описание первой задачи',
-            plan_complet_date='2021-09-13',
+            finished='2022-09-13',
             status='new'
         )
         cls.user_2 = User.objects.create(
@@ -34,7 +34,7 @@ class ViewsTests(APITestCase):
             author=cls.user_2,
             title='Название первой задачи 2-го юзера',
             description='Описание первой задачи 2-го юзера',
-            plan_complet_date='2021-09-13',
+            finished='2022-09-13',
             status='new'
         )
 
@@ -56,11 +56,11 @@ class ViewsTests(APITestCase):
                 'filtering by status'
             ),
             (
-                f'{self.tasks_url}?plan_complet_date={self.task_1.plan_complet_date}',
+                f'{self.tasks_url}?finished={self.task_1.finished}',
                 'filtering by planned completion time'
             ),
             (
-                f'{self.tasks_url}?plan_complet_date={self.task_1.plan_complet_date}&status={self.task_1.status}',
+                f'{self.tasks_url}?finished={self.task_1.finished}&status={self.task_1.status}',
                 'filtering by planned completion time and status'
             ),
         )
@@ -80,8 +80,8 @@ class ViewsTests(APITestCase):
                 self.assertTrue('created' in task)
                 self.assertEqual(task['status'], self.task_1.status)
                 self.assertEqual(
-                    task['plan_complet_date'],
-                    self.task_1.plan_complet_date
+                    task['finished'],
+                    self.task_1.finished
                 )
 
     def test_post_task(self):
@@ -90,7 +90,7 @@ class ViewsTests(APITestCase):
         post_data = {
             'title': 'Название второй задачи',
             'description': 'Описание второй задачи',
-            'plan_complet_date': '2021-10-01',
+            'finished': '2022-10-01',
             'status': 'planned'
         }
         response = self.authorized_client.post(
@@ -109,8 +109,8 @@ class ViewsTests(APITestCase):
         self.assertTrue('created' in task)
         self.assertEqual(task['status'], post_data['status'])
         self.assertEqual(
-            task['plan_complet_date'],
-            post_data['plan_complet_date']
+            task['finished'],
+            post_data['finished']
         )
 
     def test_put_task(self):
@@ -118,7 +118,7 @@ class ViewsTests(APITestCase):
         put_data = {
             'title': 'Название замененной задачи',
             'description': 'Описание замененной задачи',
-            'plan_complet_date': '2021-11-05',
+            'finished': '2022-11-05',
             'status': 'in_progress'
         }
         response = self.authorized_client.put(
@@ -137,8 +137,8 @@ class ViewsTests(APITestCase):
         )
         self.assertEqual(task['status'], put_data['status'])
         self.assertEqual(
-            task['plan_complet_date'],
-            put_data['plan_complet_date']
+            task['finished'],
+            put_data['finished']
         )
 
     def test_patch_task(self):
@@ -163,8 +163,8 @@ class ViewsTests(APITestCase):
         )
         self.assertEqual(task['status'], patch_data['status'])
         self.assertEqual(
-            task['plan_complet_date'],
-            self.task_1.plan_complet_date
+            task['finished'],
+            self.task_1.finished
         )
 
     def test_delete_task(self):
@@ -193,7 +193,7 @@ class ViewsTests(APITestCase):
         self.assertEqual(task['history'][0]['title'], change_data['title'])
         self.assertEqual(task['history'][0]['description'], None)
         self.assertEqual(task['history'][0]['status'], None)
-        self.assertEqual(task['history'][0]['plan_complet_date'], None)
+        self.assertEqual(task['history'][0]['finished'], None)
         self.assertTrue('date_change' in task['history'][0])
         self.assertEqual(task['history'][1]['title'], self.task_1.title)
         self.assertEqual(
@@ -202,8 +202,8 @@ class ViewsTests(APITestCase):
         )
         self.assertEqual(task['history'][1]['status'], self.task_1.status)
         self.assertEqual(
-            task['history'][1]['plan_complet_date'],
-            self.task_1.plan_complet_date
+            task['history'][1]['finished'],
+            self.task_1.finished
         )
 
     def test_not_view_other_user_tasks(self):

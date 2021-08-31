@@ -20,7 +20,11 @@ class Task(models.Model):
         db_index=True
     )
     status = models.CharField(max_length=11, choices=STATUS)
-    plan_complet_date = models.DateField(blank=True, null=True)
+    finished = models.DateField(
+        'Планируемая дата окончания',
+        blank=True,
+        null=True
+    )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -47,7 +51,7 @@ class TaskHistory(models.Model):
         blank=True,
         null=True
     )
-    plan_complet_date = models.DateField(blank=True, null=True)
+    finished = models.DateField(blank=True, null=True)
     date_change = models.DateTimeField(
         'Дата изменения',
         auto_now_add=True,

@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import Signal
 
-from task.models import TaskHistory, Task
+from .models import TaskHistory, Task
 
 update_task = Signal(providing_args=['instance', 'validated_data'])
 
@@ -26,7 +26,7 @@ def post_save_dispatcher(sender, **kwargs):
             title=kwargs['instance'].title,
             description=kwargs['instance'].description,
             status=kwargs['instance'].status,
-            plan_complet_date=kwargs['instance'].plan_complet_date,
+            finished=kwargs['instance'].finished,
         )
 
 

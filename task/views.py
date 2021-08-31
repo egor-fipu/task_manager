@@ -1,15 +1,15 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, mixins
 
-from task.models import Task
-from task.serializers import TaskSerializer, HistoryTaskSerializer
+from .models import Task
+from .serializers import TaskSerializer, HistoryTaskSerializer
 
 
 class TaskViewSet(viewsets.ModelViewSet):
     """Создание, просмотр, изменение задачи"""
     serializer_class = TaskSerializer
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('status', 'plan_complet_date')
+    filterset_fields = ('status', 'finished')
 
     def get_queryset(self):
         new_queryset = Task.objects.filter(author=self.request.user)

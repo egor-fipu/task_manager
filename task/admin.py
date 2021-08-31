@@ -11,7 +11,7 @@ class TaskAdmin(admin.ModelAdmin):
         'description',
         'created',
         'status',
-        'plan_complet_date',
+        'finished',
         'author'
     )
     empty_value_display = '-пусто-'

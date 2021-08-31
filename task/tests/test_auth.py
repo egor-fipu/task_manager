@@ -13,9 +13,9 @@ class AuthTests(APITestCase):
             'username': 'username',
             'password': 'test_password'
         }
-        cls.domain = 'http://127.0.0.1:8000'
-        cls.create_user_url = f'{cls.domain}/api/auth/users/'
-        cls.get_token_url = f'{cls.domain}/api/auth/token/login/'
+        cls.domain = 'http://127.0.0.1:8000/api/v1'
+        cls.create_user_url = f'{cls.domain}/auth/users/'
+        cls.get_token_url = f'{cls.domain}/auth/token/login/'
 
     def test_create_account(self):
         response = self.client.post(
