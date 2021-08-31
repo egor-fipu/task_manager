@@ -140,6 +140,36 @@ GET-запрос /api/v1/tasks/{id}/
 }
 ```
 
+### Фильтрация задач 
+- по статусу:
+
+GET-запрос /api/v1/tasks/?status=planned
+
+- по планируемому времени завершения:
+
+GET-запрос /api/v1/tasks/?finished=2021-12-03
+
+
+- по статусу и планируемому времени завершения:
+
+GET-запрос /api/v1/tasks/?finished=2021-12-03&?status=new
+
+Ответ
+```
+[
+  {
+    "id": 0,
+    "author": "string",
+    "title": "string",
+    "description": "string",
+    "created": "2021-08-24T14:15:22Z",
+    "status": "new",
+    "finished": "2021-12-03"
+  },
+  ...
+]
+```
+
 ### Получение истории изменения задачи
 GET-запрос /api/v1/task-history/{id}/
 
